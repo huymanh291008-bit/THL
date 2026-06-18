@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thiết bị xác thực - Thl System</title>
+    <style>
+        body { 
+            background-color: #0a0a0a; 
+            color: #39ff14; 
+            font-family: 'Courier New', Courier, monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .container { 
+            border: 2px solid #39ff14; 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 350px; 
+            text-align: center;
+            box-shadow: 0 0 15px #39ff14;
+        }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 15px 0; 
+            background: #000; 
+            border: 1px solid #39ff14; 
+            color: #39ff14; 
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #39ff14; 
+            color: #000; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        button:hover { background: #2ecc71; }
+        #message { margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="login-box">
+    <h2>XÁC THỰC TRUY CẬP</h2>
+    <input type="password" id="password" placeholder="Nhập mật khẩu">
+    <button onclick="checkPassword()">ĐĂNG NHẬP</button>
+</div>
+
+<div class="container" id="main-box" style="display:none;">
+    <h2>KIỂM TRA THIẾT BỊ</h2>
+    <input type="text" id="inputString" placeholder="Nhập chuỗi 40 ký tự" maxlength="40">
+    <button onclick="checkDevice()">XÁC NHẬN</button>
+    <div id="message"></div>
+</div>
+
+<script>
+    function checkPassword() {
+        if (document.getElementById('password').value === "thl-key12") {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('main-box').style.display = 'block';
+        } else {
+            alert("Mật khẩu không chính xác!");
+        }
+    }
+
+    function checkDevice() {
+        const str = document.getElementById('inputString').value;
+        const msg = document.getElementById('message');
+        if (str.length === 40) {
+            msg.innerHTML = "Duyệt thiết bị thành công! 🚀📱";
+        } else {
+            msg.innerHTML = "Không duyệt thiết bị thành công! ❌ (Yêu cầu 40 ký tự)";
+        }
+    }
+</script>
+
+</body>
+</html>
