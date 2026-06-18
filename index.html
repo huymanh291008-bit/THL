@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Thiết bị xác thực - Thl System</title>
+    <title>Security Portal - PTBA</title>
     <style>
         body { 
             background-color: #0a0a0a; 
@@ -17,7 +17,7 @@
         .container { 
             border: 2px solid #39ff14; 
             padding: 30px; 
-            border-radius: 15px; 
+            border-radius: 10px; 
             width: 350px; 
             text-align: center;
             box-shadow: 0 0 15px #39ff14;
@@ -30,6 +30,8 @@
             border: 1px solid #39ff14; 
             color: #39ff14; 
             box-sizing: border-box;
+            outline: none;
+            font-size: 16px;
         }
         button { 
             width: 100%; 
@@ -42,41 +44,46 @@
             text-transform: uppercase;
         }
         button:hover { background: #2ecc71; }
-        #message { margin-top: 15px; font-weight: bold; }
+        #message { margin-top: 20px; font-weight: bold; font-size: 1.1em; }
     </style>
 </head>
 <body>
 
 <div class="container" id="login-box">
-    <h2>XÁC THỰC TRUY CẬP</h2>
-    <input type="password" id="password" placeholder="Nhập mật khẩu">
-    <button onclick="checkPassword()">ĐĂNG NHẬP</button>
+    <h2>SYSTEM LOGIN</h2>
+    <input type="password" id="password" placeholder="ENTER KEY">
+    <button onclick="checkPassword()">XÁC NHẬN</button>
 </div>
 
 <div class="container" id="main-box" style="display:none;">
-    <h2>KIỂM TRA THIẾT BỊ</h2>
-    <input type="text" id="inputString" placeholder="Nhập chuỗi 40 ký tự" maxlength="40">
-    <button onclick="checkDevice()">XÁC NHẬN</button>
+    <h2>DEVICE VERIFICATION</h2>
+    <input type="text" id="inputString" placeholder="ENTER ID STRING">
+    <button onclick="checkDevice()">KIỂM TRA</button>
     <div id="message"></div>
 </div>
 
 <script>
     function checkPassword() {
-        if (document.getElementById('password').value === "thl-key12") {
+        const pass = document.getElementById('password').value;
+        if (pass === "ptba-key12") {
             document.getElementById('login-box').style.display = 'none';
             document.getElementById('main-box').style.display = 'block';
         } else {
-            alert("Mật khẩu không chính xác!");
+            alert("Truy cập bị từ chối.");
         }
     }
 
     function checkDevice() {
         const str = document.getElementById('inputString').value;
         const msg = document.getElementById('message');
+        
+        // Kiểm tra đúng 40 ký tự
         if (str.length === 40) {
             msg.innerHTML = "Duyệt thiết bị thành công! 🚀📱";
+            msg.style.color = "#39ff14";
         } else {
-            msg.innerHTML = "Không duyệt thiết bị thành công! ❌ (Yêu cầu 40 ký tự)";
+            msg.innerHTML = "Không duyệt thiết bị thành công! ❌";
+            msg.style.color = "#ff3e3e";
         }
     }
 </script>
