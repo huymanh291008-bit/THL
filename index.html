@@ -2,90 +2,87 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Security Portal - PTBA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { 
-            background-color: #0a0a0a; 
-            color: #39ff14; 
-            font-family: 'Courier New', Courier, monospace; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-        .container { 
-            border: 2px solid #39ff14; 
-            padding: 30px; 
-            border-radius: 10px; 
-            width: 350px; 
-            text-align: center;
-            box-shadow: 0 0 15px #39ff14;
-        }
-        input { 
-            width: 100%; 
-            padding: 10px; 
-            margin: 15px 0; 
-            background: #000; 
-            border: 1px solid #39ff14; 
-            color: #39ff14; 
-            box-sizing: border-box;
-            outline: none;
-            font-size: 16px;
-        }
-        button { 
-            width: 100%; 
-            padding: 10px; 
-            background: #39ff14; 
-            color: #000; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        button:hover { background: #2ecc71; }
-        #message { margin-top: 20px; font-weight: bold; font-size: 1.1em; }
+        body { background-color: #0a0c10; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .container { width: 360px; background: #141a25; padding: 25px; border-radius: 30px; border: 1px solid #1e293b; }
+        
+        .label { color: #64748b; font-size: 10px; font-weight: bold; margin: 15px 0 8px 0; display: block; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .btn { padding: 12px; border-radius: 15px; border: 1px solid #334155; background: #1e293b; color: white; cursor: pointer; text-align: center; }
+        .btn.active { border-color: #38bdf8; background: #1e3a5a; color: #38bdf8; }
+        
+        select { width: 100%; padding: 15px; border-radius: 15px; background: #1e293b; color: white; border: 1px solid #334155; }
+        
+        .btn-find { width: 100%; padding: 18px; margin-top: 20px; border-radius: 15px; border: none; background: linear-gradient(90deg, #38bdf8, #2563eb); color: white; font-weight: bold; cursor: pointer; }
+        
+        /* Hiệu ứng Phân tích AI */
+        #aiLoading { display: none; margin-top: 20px; text-align: center; }
+        .progress-bar { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; margin-top: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #38bdf8; width: 0%; transition: width 2s linear; }
+        
+        /* Kết quả */
+        #resultArea { display: none; margin-top: 20px; }
+        .res-item { background: #1e293b; padding: 12px; margin-bottom: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
-<div class="container" id="login-box">
-    <h2>SYSTEM LOGIN</h2>
-    <input type="password" id="password" placeholder="ENTER KEY">
-    <button onclick="checkPassword()">XÁC NHẬN</button>
-</div>
+<div class="container">
+    <span class="label">HỆ ĐIỀU HÀNH</span>
+    <div class="grid-2">
+        <button class="btn active" onclick="this.classList.toggle('active')">iOS</button>
+        <button class="btn" onclick="this.classList.toggle('active')">Android</button>
+    </div>
 
-<div class="container" id="main-box" style="display:none;">
-    <h2>DEVICE VERIFICATION</h2>
-    <input type="text" id="inputString" placeholder="ENTER ID STRING">
-    <button onclick="checkDevice()">KIỂM TRA</button>
-    <div id="message"></div>
+    <span class="label">DÒNG MÁY</span>
+    <select id="phoneSelect">
+        <option value="iphone13">iPhone 13 Pro Max</option>
+        <option value="iphoneXS">iPhone XS</option>
+    </select>
+
+    <button class="btn-find" id="searchBtn" onclick="startAnalysis()">🔍 TÌM ĐỘ NHẠY</button>
+
+    <div id="aiLoading">
+        <span style="font-size: 12px; color: #38bdf8;">Đang phân tích AI...</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    </div>
+
+    <div id="resultArea">
+        <span class="label">KẾT QUẢ ĐỀ XUẤT</span>
+        <div id="resList"></div>
+    </div>
 </div>
 
 <script>
-    function checkPassword() {
-        const pass = document.getElementById('password').value;
-        if (pass === "ptba-key12") {
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('main-box').style.display = 'block';
-        } else {
-            alert("Truy cập bị từ chối.");
-        }
+    function startAnalysis() {
+        const btn = document.getElementById('searchBtn');
+        const loading = document.getElementById('aiLoading');
+        const progress = document.getElementById('progress');
+        const resultArea = document.getElementById('resultArea');
+
+        btn.style.display = 'none';
+        loading.style.display = 'block';
+        progress.style.width = '100%';
+
+        setTimeout(() => {
+            loading.style.display = 'none';
+            resultArea.style.display = 'block';
+            showResults();
+        }, 2000); // Đợi 2 giây
     }
 
-    function checkDevice() {
-        const str = document.getElementById('inputString').value;
-        const msg = document.getElementById('message');
-        
-        // Kiểm tra đúng 40 ký tự
-        if (str.length === 40) {
-            msg.innerHTML = "Duyệt thiết bị thành công! 🚀📱";
-            msg.style.color = "#39ff14";
-        } else {
-            msg.innerHTML = "Không duyệt thiết bị thành công! ❌";
-            msg.style.color = "#ff3e3e";
-        }
+    function showResults() {
+        const data = { "GENERAL": 170, "RED DOT": 141, "2x SCOPE": 128, "4x SCOPE": 125, "AWM": 96, "FREE LOOK": 183, "NÚT BẤN": 33 };
+        const list = document.getElementById('resList');
+        list.innerHTML = Object.entries(data).map(([k, v]) => `
+            <div class="res-item">
+                <span style="color:#94a3b8; font-size:13px;">${k}</span>
+                <span style="color:#38bdf8; font-weight:bold; font-size:18px;">${v}</span>
+            </div>
+        `).join('');
     }
 </script>
-
 </body>
+</html>
